@@ -13,25 +13,24 @@ ubuntu README
 ## Automatic install/update  
   
 ```shell
-dockermgr update ubuntu
+dockermgr update os ubuntu
 ```
   
 ## Install and run container
   
 ```shell
-mkdir -p "$HOME/.local/share/srv/docker/ubuntu/rootfs"
+mkdir -p "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest"
 git clone "https://github.com/dockermgr/ubuntu" "$HOME/.local/share/CasjaysDev/dockermgr/ubuntu"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ubuntu/rootfs/." "$HOME/.local/share/srv/docker/ubuntu/rootfs/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ubuntu/rootfs/." "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/"
 docker run -d \
 --restart always \
 --privileged \
---name casjaysdevdocker-ubuntu \
+--name casjaysdev-ubuntu-latest \
 --hostname ubuntu \
 -e TZ=${TIMEZONE:-America/New_York} \
--v "$HOME/.local/share/srv/docker/casjaysdevdocker-ubuntu/rootfs/data:/data:z" \
--v "$HOME/.local/share/srv/docker/casjaysdevdocker-ubuntu/rootfs/config:/config:z" \
--p 80:80 \
-casjaysdevdocker/ubuntu:latest
+-v "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/data:/data:z" \
+-v "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/config:/config:z" \
+casjaysdev/ubuntu:latest
 ```
   
 ## via docker-compose  
@@ -40,39 +39,31 @@ casjaysdevdocker/ubuntu:latest
 version: "2"
 services:
   ProjectName:
-    image: casjaysdevdocker/ubuntu
-    container_name: casjaysdevdocker-ubuntu
+    image: casjaysdev/ubuntu
+    container_name: casjaysdev-ubuntu-latest
     environment:
       - TZ=America/New_York
       - HOSTNAME=ubuntu
     volumes:
-      - "$HOME/.local/share/srv/docker/casjaysdevdocker-ubuntu/rootfs/data:/data:z"
-      - "$HOME/.local/share/srv/docker/casjaysdevdocker-ubuntu/rootfs/config:/config:z"
-    ports:
-      - 80:80
+      - "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/data:/data:z"
+      - "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/config:/config:z"
     restart: always
 ```
   
 ## Get source files  
   
 ```shell
-dockermgr download src casjaysdevdocker/ubuntu
-```
-  
-OR
-  
-```shell
-git clone "https://github.com/casjaysdevdocker/ubuntu" "$HOME/Projects/github/casjaysdevdocker/ubuntu"
+dockermgr download src os ubuntu
 ```
   
 ## Build container  
   
 ```shell
-cd "$HOME/Projects/github/casjaysdevdocker/ubuntu"
-buildx 
+git clone "https://github.com/dockersrc/ubuntu" "$HOME/Projects/github/dockersrc/ubuntu"
+cd "$HOME/Projects/github/dockersrc/ubuntu" && buildx all 
 ```
   
 ## Authors  
   
 🤖 casjay: [Github](https://github.com/casjay) 🤖  
-⛵ casjaysdevdocker: [Github](https://github.com/casjaysdevdocker) [Docker](https://hub.docker.com/u/casjaysdevdocker) ⛵  
+⛵ casjaysdevdocker: [Github](https://github.com/dockersrc) [Docker](https://hub.docker.com/u/casjaysdevdocker) ⛵  

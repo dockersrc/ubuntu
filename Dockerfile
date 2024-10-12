@@ -2,7 +2,7 @@
 # Docker image for ubuntu using the ubuntu template
 ARG IMAGE_NAME="ubuntu"
 ARG PHP_SERVER="ubuntu"
-ARG BUILD_DATE="Sun Aug 11 10:51:09 AM EDT 2024"
+ARG BUILD_DATE="Sat Oct 12 10:51:09 AM EDT 2024"
 ARG LANGUAGE="en_US.UTF-8"
 ARG TIMEZONE="America/New_York"
 ARG WWW_ROOT_DIR="/usr/share/httpd/default"
@@ -64,7 +64,7 @@ ENV TIMEZONE="${TZ}"
 ENV LANG="${LANGUAGE}"
 ENV LC_ALL="${LANGUAGE}"
 ENV TERM="xterm-256color"
-ENV HOSTNAME="casjaysdevdocker-ubuntu"
+ENV HOSTNAME="casjaysdev-ubuntu"
 ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND}"
 
 USER ${USER}
