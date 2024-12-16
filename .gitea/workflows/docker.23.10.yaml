@@ -1,4 +1,4 @@
-name: release-tag
+name: ubuntu-23.10
 
 on: push
 
