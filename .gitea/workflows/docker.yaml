@@ -3,7 +3,7 @@ name: ubuntu-latest
 on: push
 
 jobs:
-  release-image:
+  ubuntu-latest:
     runs-on: act_runner
     container:
       image: catthehacker/ubuntu:act-latest

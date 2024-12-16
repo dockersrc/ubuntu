@@ -1,9 +1,9 @@
-name: ubuntu-23.04
+name: ubuntu-23-04
 
 on: push
 
 jobs:
-  release-image:
+  ubuntu-23-04:
     runs-on: act_runner
     container:
       image: catthehacker/ubuntu:act-latest

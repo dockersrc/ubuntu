@@ -1,9 +1,9 @@
-name: ubuntu-24.04
+name: ubuntu-24-04
 
 on: push
 
 jobs:
-  release-image:
+  ubuntu-24-04:
     runs-on: act_runner
     container:
       image: catthehacker/ubuntu:act-latest
