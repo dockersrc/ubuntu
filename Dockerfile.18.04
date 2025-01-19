@@ -22,8 +22,8 @@ ARG NODE_VERSION="system"
 ARG NODE_MANAGER="system"
 
 ARG IMAGE_REPO="casjaysdev/ubuntu"
-ARG IMAGE_VERSION="19.04"
-ARG CONTAINER_VERSION="disco"
+ARG IMAGE_VERSION="18.04"
+ARG CONTAINER_VERSION="bionic"
 
 ARG PULL_URL="ubuntu"
 ARG DISTRO_VERSION="${IMAGE_VERSION}"
@@ -78,7 +78,7 @@ RUN set -e; \
   echo "Setting up prerequisites"; \
   echo "$LANG UTF-8" >"/etc/locale.gen"; \
   echo 'export DEBIAN_FRONTEND="'${DEBIAN_FRONTEND}'"' >"/etc/profile.d/apt.sh" && chmod 755 "/etc/profile.d/apt.sh"; \
-sed -i 's|http://\([a-z0-9.-]*\)\.archive.ubuntu.com/ubuntu|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list; \
+  sed -i 's|http://\([a-z0-9.-]*\)\.archive.ubuntu.com/ubuntu|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list; \
   apt-get update;apt-get upgrade -yy;apt-get install -yy bash locales; \
   dpkg-reconfigure --frontend=noninteractive locales;update-locale LANG=$LANG; \
   update-alternatives --install /bin/sh sh /bin/bash 1
@@ -116,7 +116,7 @@ RUN echo "Initializing packages before copying files to image"; \
   echo ""
 
 COPY ./rootfs/. /
-COPY ./Dockerfile.19.04 /root/docker/Dockerfile
+COPY ./Dockerfile.18.04 /root/docker/Dockerfile
 
 RUN echo "Updating system files "; \
   $SHELL_OPTS; \
