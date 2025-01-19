@@ -1,9 +1,9 @@
-name: ubuntu-23-04
+name: ubuntu-18-04
 
 on: push
 
 jobs:
-  ubuntu-23-04:
+  ubuntu-18-04:
     runs-on: act_runner
     container:
       image: catthehacker/ubuntu:act-latest
@@ -17,14 +17,15 @@ jobs:
         uses: docker/setup-qemu-action@v2
 
       - name: Get Meta
+        id: meta
         env:
-          TAG: 23.04
+          TAG: 18.04
           ORG: casjaysdev
           HUB: docker.io
         run: |
           echo DATE_TAG=$(date +'%y%m') >> $GITHUB_OUTPUT
           echo REPO_VERSION=$(git describe --tags --always | sed 's/^v//') >> $GITHUB_OUTPUT
-          echo DOCKER_TAG=$([ -n "$TAG" ] && echo $TAG || echo "23.04") >> $GITHUB_OUTPUT
+          echo DOCKER_TAG=$([ -n "$TAG" ] && echo $TAG || echo "18.04") >> $GITHUB_OUTPUT
           echo DOCKER_HUB=$([ -n "$HUB" ] && echo $HUB || echo "docker.io") >> $GITHUB_OUTPUT
           echo DOCKER_ORG=$([ -n "$ORG" ] && echo "$ORG" || echo "casjaysdev") >> $GITHUB_OUTPUT
           echo REPO_NAME=$(echo ${GITHUB_REPOSITORY} | awk -F"/" '{print $2}' | sed 's|^docker-||g') >> $GITHUB_OUTPUT
@@ -43,11 +44,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile.23.04
+          file: ./Dockerfile.18.04
           platforms: |
             linux/amd64
             linux/arm64
           push: true
           tags: | # replace it with your local IP and tags
-            ${{ steps.meta.outputs.DOCKER_HUB }}/${{ steps.meta.outputs.DOCKER_ORG }}/${{ steps.meta.outputs.REPO_NAME }}:lunar
+            ${{ steps.meta.outputs.DOCKER_HUB }}/${{ steps.meta.outputs.DOCKER_ORG }}/${{ steps.meta.outputs.REPO_NAME }}:disco
             ${{ steps.meta.outputs.DOCKER_HUB }}/${{ steps.meta.outputs.DOCKER_ORG }}/${{ steps.meta.outputs.REPO_NAME }}:${{ steps.meta.outputs.DOCKER_TAG }}
