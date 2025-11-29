@@ -1,7 +1,7 @@
 # Docker image for ubuntu using the ubuntu template
 ARG IMAGE_NAME="ubuntu"
 ARG PHP_SERVER="ubuntu"
-ARG BUILD_DATE="202509161149"
+ARG BUILD_DATE="202511291148"
 ARG LANGUAGE="en_US.UTF-8"
 ARG TIMEZONE="America/New_York"
 ARG WWW_ROOT_DIR="/usr/local/share/httpd/default"
@@ -86,7 +86,7 @@ RUN set -e; \
   apt-get update && apt-get upgrade -yy && apt-get install -yy bash locales apt-utils; \
   update-alternatives --install /bin/sh sh /bin/bash 1; \
   update-alternatives --install /usr/bin/sh sh /bin/bash 1; \
-  locale-gen $LANG && update-locale LANG=$LANG
+  dpkg-reconfigure --frontend=noninteractive locales;update-locale LANG=$LANG
 
 ENV SHELL="/bin/bash"
 SHELL [ "/bin/bash", "-c" ]
@@ -229,12 +229,12 @@ LABEL org.opencontainers.image.authors="${LICENSE}"
 LABEL org.opencontainers.image.created="${BUILD_DATE}"
 LABEL org.opencontainers.image.version="${BUILD_VERSION}"
 LABEL org.opencontainers.image.schema-version="${BUILD_VERSION}"
-LABEL org.opencontainers.image.url="docker.io"
-LABEL org.opencontainers.image.source="docker.io"
+LABEL org.opencontainers.image.url="https://hub.docker.com/casjaysdevdocker/ubuntu"
+LABEL org.opencontainers.image.source="https://hub.docker.com/casjaysdevdocker/ubuntu"
 LABEL org.opencontainers.image.vcs-type="Git"
 LABEL org.opencontainers.image.revision="${BUILD_VERSION}"
-LABEL org.opencontainers.image.source="https://github.com/casjaysdev/ubuntu"
-LABEL org.opencontainers.image.documentation="https://github.com/casjaysdev/ubuntu"
+LABEL org.opencontainers.image.source="https://github.com/casjaysdevdocker/ubuntu"
+LABEL org.opencontainers.image.documentation="https://github.com/casjaysdevdocker/ubuntu"
 LABEL com.github.containers.toolbox="false"
 
 ENV ENV=~/.bashrc
@@ -264,6 +264,5 @@ EXPOSE ${SERVICE_PORT} ${ENV_PORTS}
 
 STOPSIGNAL SIGRTMIN+3
 
-CMD [ "tail", "-f", "/dev/null" ]
 ENTRYPOINT [ "tini", "-p", "SIGTERM","--", "/usr/local/bin/entrypoint.sh" ]
 HEALTHCHECK --start-period=10m --interval=5m --timeout=15s CMD [ "/usr/local/bin/entrypoint.sh", "healthcheck" ]
