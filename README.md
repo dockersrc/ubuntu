@@ -21,7 +21,7 @@ dockermgr update os ubuntu
 ```shell
 mkdir -p "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest"
 git clone "https://github.com/dockermgr/ubuntu" "$HOME/.local/share/CasjaysDev/dockermgr/ubuntu"
-cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ubuntu/rootfs/." "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/"
+cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/ubuntu/dockerfs/." "/var/lib/srv/root/docker/casjaysdev/ubuntu/latest/"
 docker run -d \
 --restart always \
 --privileged \
