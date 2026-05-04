@@ -83,8 +83,13 @@ RUN set -e; \
   echo "Setting up prerequisites"; \
   echo "$LANG UTF-8" >"/etc/locale.gen"; \
   echo 'export DEBIAN_FRONTEND="'${DEBIAN_FRONTEND}'"' >"/etc/profile.d/apt.sh" && chmod 755 "/etc/profile.d/apt.sh"; \
-  sed -i 's|http://archive.ubuntu.com/ubuntu|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list || true; \
-  sed -i 's|http://security.ubuntu.com/ubuntu|http://old-releases.ubuntu.com/ubuntu|g' /etc/apt/sources.list || true; \
+  arch="$(dpkg --print-architecture)"; \
+  case "$arch" in amd64|i386) ubuntu_mirror="http://archive.ubuntu.com/ubuntu"; ubuntu_security="http://security.ubuntu.com/ubuntu" ;; *) ubuntu_mirror="http://ports.ubuntu.com/ubuntu-ports"; ubuntu_security="$ubuntu_mirror" ;; esac; \
+  printf '%s\n' \
+    "deb ${ubuntu_mirror} bionic main restricted universe multiverse" \
+    "deb ${ubuntu_mirror} bionic-updates main restricted universe multiverse" \
+    "deb ${ubuntu_mirror} bionic-backports main restricted universe multiverse" \
+    "deb ${ubuntu_security} bionic-security main restricted universe multiverse" > /etc/apt/sources.list; \
   apt-get update && apt-get upgrade -yy && apt-get install -yy bash locales apt-utils; \
   update-alternatives --install /bin/sh sh /bin/bash 1; \
   update-alternatives --install /usr/bin/sh sh /bin/bash 1; \
