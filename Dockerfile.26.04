@@ -23,8 +23,8 @@ ARG NODE_VERSION="system"
 ARG NODE_MANAGER="system"
 
 ARG IMAGE_REPO="casjaysdev/ubuntu"
-ARG IMAGE_VERSION="20.04"
-ARG CONTAINER_VERSION="focal"
+ARG IMAGE_VERSION="26.04"
+ARG CONTAINER_VERSION="resolute"
 
 ARG PULL_URL="ubuntu"
 ARG DISTRO_VERSION="${IMAGE_VERSION}"
@@ -84,12 +84,12 @@ RUN set -e; \
   echo "$LANG UTF-8" >"/etc/locale.gen"; \
   echo 'export DEBIAN_FRONTEND="'${DEBIAN_FRONTEND}'"' >"/etc/profile.d/apt.sh" && chmod 755 "/etc/profile.d/apt.sh"; \
   arch="$(dpkg --print-architecture)"; \
-  case "$arch" in amd64|i386) ubuntu_mirror="http://old-releases.ubuntu.com/ubuntu"; ubuntu_security="$ubuntu_mirror" ;; *) ubuntu_mirror="http://old-releases.ports.ubuntu.com/ubuntu-ports"; ubuntu_security="$ubuntu_mirror" ;; esac; \
+  case "$arch" in amd64|i386) ubuntu_mirror="http://archive.ubuntu.com/ubuntu"; ubuntu_security="http://security.ubuntu.com/ubuntu" ;; *) ubuntu_mirror="http://ports.ubuntu.com/ubuntu-ports"; ubuntu_security="$ubuntu_mirror" ;; esac; \
   printf '%s\n' \
-    "deb ${ubuntu_mirror} focal main restricted universe multiverse" \
-    "deb ${ubuntu_mirror} focal-updates main restricted universe multiverse" \
-    "deb ${ubuntu_mirror} focal-backports main restricted universe multiverse" \
-    "deb ${ubuntu_security} focal-security main restricted universe multiverse" > /etc/apt/sources.list; \
+    "deb ${ubuntu_mirror} resolute main restricted universe multiverse" \
+    "deb ${ubuntu_mirror} resolute-updates main restricted universe multiverse" \
+    "deb ${ubuntu_mirror} resolute-backports main restricted universe multiverse" \
+    "deb ${ubuntu_security} resolute-security main restricted universe multiverse" > /etc/apt/sources.list; \
   rm -f /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true; \
   apt-get update && apt-get upgrade -yy && apt-get install -yy bash locales apt-utils; \
   update-alternatives --install /bin/sh sh /bin/bash 1; \
@@ -128,7 +128,7 @@ RUN echo "Initializing packages before copying files to image"; \
   echo ""
 
 COPY ./rootfs/. /
-COPY ./Dockerfile.20.04 /root/docker/Dockerfile
+COPY ./Dockerfile.26.04 /root/docker/Dockerfile
 
 RUN echo "Updating system files "; \
   $SHELL_OPTS; \

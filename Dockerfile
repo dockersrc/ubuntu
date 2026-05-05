@@ -73,7 +73,7 @@ ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND}"
 USER ${USER}
 WORKDIR /root
 
-COPY ./dockerfs/usr/local/bin/. /usr/local/bin/
+COPY ./rootfs/usr/local/bin/. /usr/local/bin/
 
 RUN set -e; \
   echo "Updating the system and ensuring bash is installed"; \
@@ -83,6 +83,17 @@ RUN set -e; \
   echo "Setting up prerequisites"; \
   echo "$LANG UTF-8" >"/etc/locale.gen"; \
   echo 'export DEBIAN_FRONTEND="'${DEBIAN_FRONTEND}'"' >"/etc/profile.d/apt.sh" && chmod 755 "/etc/profile.d/apt.sh"; \
+  codename="$(. /etc/os-release && echo "${VERSION_CODENAME:-${UBUNTU_CODENAME:-}}")"; \
+  arch="$(dpkg --print-architecture)"; \
+  case "$arch" in amd64|i386) ubuntu_mirror="http://archive.ubuntu.com/ubuntu"; ubuntu_security="http://security.ubuntu.com/ubuntu" ;; *) ubuntu_mirror="http://ports.ubuntu.com/ubuntu-ports"; ubuntu_security="$ubuntu_mirror" ;; esac; \
+  if [ -n "$codename" ]; then \
+    printf '%s\n' \
+      "deb ${ubuntu_mirror} ${codename} main restricted universe multiverse" \
+      "deb ${ubuntu_mirror} ${codename}-updates main restricted universe multiverse" \
+      "deb ${ubuntu_mirror} ${codename}-backports main restricted universe multiverse" \
+      "deb ${ubuntu_security} ${codename}-security main restricted universe multiverse" > /etc/apt/sources.list; \
+    rm -f /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true; \
+  fi; \
   apt-get update && apt-get upgrade -yy && apt-get install -yy bash locales apt-utils; \
   update-alternatives --install /bin/sh sh /bin/bash 1; \
   update-alternatives --install /usr/bin/sh sh /bin/bash 1; \
@@ -119,7 +130,7 @@ RUN echo "Initializing packages before copying files to image"; \
   if [ -f "/root/docker/setup/02-packages.sh" ];then echo "Running the packages script";/root/docker/setup/02-packages.sh||{ echo "Failed to execute /root/docker/setup/02-packages.sh" >&2 && exit 10; };echo "Done running the packages script";fi; \
   echo ""
 
-COPY ./dockerfs/. /
+COPY ./rootfs/. /
 COPY ./Dockerfile /root/docker/Dockerfile
 
 RUN echo "Updating system files "; \
