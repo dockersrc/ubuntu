@@ -84,7 +84,7 @@ RUN set -e; \
   echo "$LANG UTF-8" >"/etc/locale.gen"; \
   echo 'export DEBIAN_FRONTEND="'${DEBIAN_FRONTEND}'"' >"/etc/profile.d/apt.sh" && chmod 755 "/etc/profile.d/apt.sh"; \
   arch="$(dpkg --print-architecture)"; \
-  case "$arch" in amd64|i386) ubuntu_mirror="http://old-releases.ubuntu.com/ubuntu"; ubuntu_security="$ubuntu_mirror" ;; *) ubuntu_mirror="http://old-releases.ports.ubuntu.com/ubuntu-ports"; ubuntu_security="$ubuntu_mirror" ;; esac; \
+  case "$arch" in amd64|i386) ubuntu_mirror="http://archive.ubuntu.com/ubuntu"; ubuntu_security="http://security.ubuntu.com/ubuntu" ;; *) ubuntu_mirror="http://ports.ubuntu.com/ubuntu-ports"; ubuntu_security="$ubuntu_mirror" ;; esac; \
   printf '%s\n' \
     "deb ${ubuntu_mirror} bionic main restricted universe multiverse" \
     "deb ${ubuntu_mirror} bionic-updates main restricted universe multiverse" \
